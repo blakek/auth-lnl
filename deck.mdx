@@ -1,0 +1,102 @@
+import { Appear, Head, Image } from '@mdx-deck/components';
+import And from './And';
+
+export { book as theme } from '@mdx-deck/themes';
+
+<Head>
+  <title>Authentication & Authorization</title>
+</Head>
+
+# Authentication <And /> Authorization
+
+---
+
+## What are we talking about today?
+
+- Authentication vs. authorization
+- Common ways we deal with these
+- Concrete examples
+
+---
+
+## Are they the same?
+
+No
+
+<Appear>
+  <p>To be fair, they’re ususally used together.</p>
+</Appear>
+
+---
+
+## What do they mean?
+
+> **Authentication** is the act of confirming the truth of an attribute of a
+> single piece of data claimed true by an entity.
+
+> **Authorization** is the function of specifying access rights/privileges to
+> resources related to information security and computer security in general and
+> to access control in particular.
+
+---
+
+<Image
+  alt="Why don't you explain this to me like I'm five?"
+  src="https://media.giphy.com/media/5wWf7H89PisM6An8UAU/giphy.gif"
+/>
+
+---
+
+## What do they mean?
+
+**Authentication**: proving you are who you say you are
+
+**Authorization**: proving you have permission to do something
+
+<Appear>
+  <aside>
+    (HTTP standard is{' '}
+    <a
+      href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+      target="_blank"
+    >
+      incorrect
+    </a>
+    )
+  </aside>
+</Appear>
+
+---
+
+## Common Usages in Our Field
+
+- Basic Auth
+- OAuth 2.0
+- SAML
+
+---
+
+## Basic Auth
+
+- oldest standard in this talk
+- easy to implement
+- needs HTTPS to be secure
+
+---
+
+## OAuth 2.0
+
+- flexible <And /> secure
+- easier for admins
+- sometimes confusing terminology
+- deals with authorization only
+- can “add on” authentication; OpenID Connect
+
+---
+
+## SAML
+
+- notoriously complicated
+- easier for admins
+- specs for authentication and authorization
+- “Enterprise” SSO

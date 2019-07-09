@@ -1,0 +1,13 @@
+{
+  "name": "auth-lnl",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Blake Knight <oss.ideas@gmail.com> (http://blakek.me/)",
+  "license": "MIT",
+  "devDependencies": {
+    "mdx-deck": "^2.4.0"
+  },
+  "scripts": {
+    "start": "mdx-deck deck.mdx"
+  }
+}
