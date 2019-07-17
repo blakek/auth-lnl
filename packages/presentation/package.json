@@ -1,0 +1,13 @@
+{
+  "author": "Blake Knight <oss.ideas@gmail.com> (http://blakek.me/)",
+  "devDependencies": {
+    "mdx-deck": "^2.4.0"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "name": "@auth-lnl/presentation",
+  "scripts": {
+    "start": "mdx-deck deck.mdx"
+  },
+  "version": "1.0.0"
+}

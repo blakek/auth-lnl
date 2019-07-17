@@ -1,0 +1,20 @@
+{
+  "name": "@auth-lnl/example-basic-auth",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "GS&F Devs <mindreactor@gsandf.com> (https://gsandf.com/)",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon --experimental-modules --inspect ./index.js"
+  },
+  "dependencies": {
+    "@auth-lnl/users": "1.0.0",
+    "dot-prop": "^5.1.0",
+    "express": "^4.17.1",
+    "template-file": "^3.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
