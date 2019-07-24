@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>OAuth Example - Login</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <h1>myhipster.app</h1>
+
+    <form id="login-form">
+      <label>
+        <div>Username</div>
+        <input name="username" type="text" />
+      </label>
+
+      <label>
+        <div>Password</div>
+        <input name="password" type="password" />
+      </label>
+
+      <button>Login</button>
+    </form>
+
+    <script>
+      const loginForm = document.getElementById('login-form');
+
+      loginForm.addEventListener('submit', async event => {
+        event.preventDefault();
+
+        const username = loginForm.querySelector('[name=username]').value;
+        const password = loginForm.querySelector('[name=password]').value;
+        const token = btoa(`${username}:${password}`);
+
+        const response = await fetch('/check-login', {
+          headers: { Authorization: `Basic ${token}` },
+          method: 'POST'
+        });
+
+        if (response.status === 200) {
+          localStorage.setItem('token', token);
+          window.location = '/account';
+        }
+      });
+    </script>
+  </body>
+</html>

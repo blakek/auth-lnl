@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>OAuth Example - Login</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <h1>myhipster.app</h1>
+    <a href="#" id="login-button">Login</a>
+  </body>
+
+  <script>
+    const loginButton = document.getElementById('login-button');
+
+    const uriParts = new URLSearchParams({
+      client_id: '3Hf1U9I6r01Y347e9JGMCOiGP8eVwKt0',
+      response_type: 'code',
+      redirect_uri: 'http://localhost:3001/callback',
+      scope: 'openid profile'
+    });
+
+    loginButton.href = `https://gsandf-lnl-test.auth0.com/authorize?${uriParts.toString()}`;
+  </script>
+</html>

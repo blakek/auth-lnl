@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>OAuth Example - Account</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <h1 id="welcomeElement">Loading…</h1>
+
+    <p id="rolesElement"></p>
+
+    <button onclick="javascript:logout()">Log out</button>
+
+    <script>
+      window.tokens = JSON.parse('{{tokens}}');
+    </script>
+
+    <script>
+      const rolesElement = document.getElementById('rolesElement');
+      const welcomeElement = document.getElementById('welcomeElement');
+      const token = localStorage.getItem('token');
+
+      if (token) {
+        getUserDetails();
+      } else {
+        window.location = '/login';
+      }
+
+      async function getUserDetails() {
+        const userDetails = await fetch('/userinfo', {
+          headers: { Authorization: `Basic ${token}` },
+          method: 'POST'
+        }).then(res => res.json());
+
+        welcomeElement.textContent = `Welcome, ${userDetails.name}!`;
+        rolesElement.textContent = `You have the following roles: ${userDetails.roles.join(
+          ', '
+        )}`;
+      }
+
+      function logout() {
+        localStorage.clear();
+        window.location = '/login';
+      }
+    </script>
+  </body>
+</html>

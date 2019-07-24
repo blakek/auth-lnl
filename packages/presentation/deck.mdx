@@ -1,13 +1,32 @@
-import { Appear, Head, Image } from '@mdx-deck/components';
+import { Appear, Head, Image, Notes } from '@mdx-deck/components';
+import { Invert, Split } from '@mdx-deck/layouts';
+import { tomorrow as codeStyle } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import And from './And';
-
-export { book as theme } from '@mdx-deck/themes';
+import ProConList from './ProConList';
+export { themes } from './theme';
 
 <Head>
   <title>Authentication & Authorization</title>
 </Head>
 
+<!-- Blank page for presentation start -->
+
+<Invert />
+
+---
+
+<Invert>
+
 # Authentication <And /> Authorization
+
+<Appear>
+
+> …but really a talk about <u>Basic Auth</u> and <u>OAuth2</u>
+
+</Appear>
+
+</Invert>
 
 ---
 
@@ -15,28 +34,46 @@ export { book as theme } from '@mdx-deck/themes';
 
 - Authentication vs. authorization
 - Common ways we deal with these
-- Concrete examples
+- Examples
 
 ---
 
-## Are they the same?
+## Authentication <And /> Authorization
+
+### Are they the same?
 
 No
 
 <Appear>
-  <p>To be fair, they’re ususally used together.</p>
+
+To be fair, they’re ususally used together.
+
 </Appear>
+
+<Notes>
+
+This may sound like we're getting too detailed, but I think it helps to
+understand what we'll talk about later.
+
+</Notes>
 
 ---
 
-## What do they mean?
+<Notes>
 
-> **Authentication** is the act of confirming the truth of an attribute of a
+This is really an over-complicated definition. I hope you'll understand what it
+means in just a second, though.
+
+</Notes>
+
+## Authentication <And /> Authorization — Meaning
+
+> **Authentication** is the act of confirming the truth of an attribute of a<br />
 > single piece of data claimed true by an entity.
 
-> **Authorization** is the function of specifying access rights/privileges to
-> resources related to information security and computer security in general and
-> to access control in particular.
+> **Authorization** is the function of specifying access rights/privileges to<br />
+> resources related to information security and computer security in general<br />
+> and to access control in particular.
 
 ---
 
@@ -47,56 +84,384 @@ No
 
 ---
 
-## What do they mean?
+## Authentication <And /> Authorization — Meaning
 
 **Authentication**: proving you are who you say you are
 
 **Authorization**: proving you have permission to do something
 
 <Appear>
-  <aside>
-    (HTTP standard is{' '}
-    <a
-      href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
-      target="_blank"
-    >
-      incorrect
-    </a>
-    )
-  </aside>
+<aside>
+
+(It’s arguable that the HTTP standard uses these [incorrectly](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401))
+
+</aside>
 </Appear>
+
+<Notes>
+
+Don't worry too much about using these correctly all the tine.
+You'll start to notice where they're used incorrectly by very smart people all
+the time.
+
+(Read first paragraph of linked MDN doc)
+
+</Notes>
 
 ---
 
 ## Common Usages in Web Services
 
-- Basic Auth
-- OAuth 2.0
-- SAML
+- Basic Auth (authentication, authorization is separate)
+- SAML (authorization and authentication part of standard)
+- OAuth 2.0 (authorization with common options for authentication)
+
+**NOTE:** these are not mutually exclusive
+
+<Notes>
+
+We use OAuth 2.0 the most here.
+
+We'll try and touch on all, but most of our time will be spend on OAuth 2.0.
+
+…not mutually exclusive. A service can implement all 3 if needed.
+
+</Notes>
 
 ---
 
-## Basic Auth
+<Invert>
 
-- oldest standard in this talk
-- easy to implement
-- needs HTTPS to be secure
+# Let’s talk about Basic Auth
+
+</Invert>
+
+---
+
+## Basic Auth — Why
+
+Straightforward way of adding authentication to a service
+
+---
+
+## Basic Auth — How it Works
+
+- Send a user’s credentials to server
+- Uses HTTP headers
+- Server uses own logic to check credentials (and optionally authorization)
+
+---
+
+## Basic Auth — Flow
+
+- Prompt user for username/password directly
+- Encode username/password for adding to header
+- Add to `Authorization` header with HTTP requests
+
+---
+
+## Basic Auth — Implementing (Client-Side)
+
+- combine username, colon (`:`), and password
+- Base64 encode (this is **not** encryption)
+- send in future requests as `Authorization: Basic {{encoded value}}`
+
+---
+
+## Basic Auth — Implementing (Client-Side)
+
+<SyntaxHighlighter language="javascript" style={{ ...codeStyle, fontSize: 16 }}>
+  {atob(
+    'Ly8gVGFrZSBpbiBjcmVkZW50aWFscyBiZWZvcmUgbWFraW5nIEFQSSBjYWxsLgovLyBGb3IgZXhhbXBsZSwgeW91IGNvdWxkIGdldCBhbiBpbnB1dCdzIHZhbHVlLgpjb25zdCB1c2VybmFtZSA9ICdhZG1pbic7CmNvbnN0IHBhc3N3b3JkID0gJzQyMzVtMW5kJzsKCi8vIEJhc2U2NC1lbmNvZGUgdGhlIHVzZXJuYW1lIGFuZCBwYXNzd29yZAovLyB3aXRoIGEgY29sb24gc2VwYXJhdG9yOgpjb25zdCBjcmVkZW50aWFscyA9IGJ0b2EoYCR7dXNlcm5hbWV9OiR7cGFzc3dvcmR9YCk7CgovLyBMYXRlciwgeW91IGNhbiBjYWxsIGFuIEFQSSB1c2luZyB0aGUgY3JlZGVudGlhbHM6CmF3YWl0IGZldGNoKCdodHRwczovL2FwaS5leGFtcGxlLmNvbScsIHsKICBoZWFkZXJzOiB7IEF1dGhvcml6YXRpb246IGBCYXNpYyAke2NyZWRlbnRpYWxzfWAgfQp9KTsK'
+  ).trim()}
+</SyntaxHighlighter>
+
+---
+
+## Basic Auth — Implementing (Server-Side)
+
+- Look at `Authorization` header contents
+- Base64 decode contents after `Basic`
+- split value on colon for username and password
+
+---
+
+## Basic Auth — Pros <And /> Cons
+
+<ProConList
+  cons={[
+    'nothing about authorization in spec',
+    'user credentials given to external service',
+    'service needs to store credentials and user permissions',
+    'user needs new credentials for service',
+    'difficult for IT departments to control'
+  ]}
+  pros={['easy to implement']}
+/>
+
+---
+
+## Basic Auth — Usage Suggestions
+
+One-off app/service/website where minimizing<br />
+up-front cost is a priority
+
+---
+
+<Invert>
+
+# Let’s talk about SAML
+
+</Invert>
+
+---
+
+## SAML
+
+No examples. Just the basics.
+
+<Notes>
+
+For sake of time, we're going to basically skip SAML. However, it's good to know
+why it's used.
+
+</Notes>
+
+---
+
+## SAML
+
+- notoriously complicated to set up
+- terminology is confusing
+- fairly easy for system admins once set up
+- specs focuses on authentication and authorization
+- spec is flexible
+- “Enterprise” SSO
+- **user account can be created immediately on all necessary services**
+- **don’t need user’s password for a service**
+
+<Notes>
+
+- It's not really _that_ complicated. It's mostly the terminology.
+- Terminology is very specific to SAML.
+- Last 2 bullet points are probably the biggest reasons to use.
+
+</Notes>
+
+---
+
+## SAML — Why
+
+Allows using one set of credentials for multiple services
+
+---
+
+## SAML — Flow
+
+(Note, this is a very basic explanation)
+
+0. **Before:** service is set up with SSO provider
+1. user goes to app/service
+1. service redirects to SSO provider
+1. user logs into SSO provider
+1. SSO provider redirects to app/service
+1. app/service keeps in contact with SSO provider for user permissions
+
+---
+
+## SAML — Pros <And /> Cons
+
+<ProConList
+  cons={[
+    'requires SSO system to be set up',
+    'difficult/expensive to start (for service and company)'
+  ]}
+  pros={[
+    'absolute control for IT departments',
+    'user credentials are same across all SSO systems',
+    'user credentials are saved by internal systems only',
+    'flexible spec'
+  ]}
+/>
+
+---
+
+## SAML — Usage Suggestions
+
+- App/service/website that is focused on enterprise usage
+
+---
+
+<Invert>
+
+# Let’s talk about OAuth 2.0
+
+</Invert>
 
 ---
 
 ## OAuth 2.0
 
 - flexible <And /> secure
-- easier for admins
-- sometimes confusing terminology
-- deals with authorization only
+- terminology can be confusing
+- standard focuses on authorization only
 - can “add on” authentication; OpenID Connect
+- **don’t need user’s password for a service**
+
+<Notes>
+
+- Although standard focuses on authorization, most OAuth users also use it for
+  authorization
+- Popular services tend to differ on how authorization works
+- OpenID Connect is an attempt to standardize authentication portion
+
+</Notes>
 
 ---
 
-## SAML
+## OAuth 2.0 — Why
 
-- notoriously complicated
-- easier for admins
-- specs for authentication and authorization
-- “Enterprise” SSO
+Separate authorization from the service
+
+<Notes>
+
+That may not sound very important, but it's opened a lot of new possibilites:
+
+</Notes>
+
+---
+
+## OAuth 2.0 — Why
+
+10 years ago, people were apparently fine giving out their credentials:
+
+![Screen capture of Facebook prompting for a Skype username and password](http://seniornet.org/blog/wp-content/uploads/2012/04/Find-Fb-Friends.jpg)
+
+<Notes>
+
+At least they have this:
+
+> Facebook won't store your password
+
+</Notes>
+
+---
+
+## OAuth 2.0 — Why
+
+10 years ago, this thing was 1 year old:
+
+<img
+  src="https://upload.wikimedia.org/wikipedia/commons/c/cf/App_Store_iOS.svg"
+  height="300"
+  width="300"
+/>
+
+---
+
+## OAuth 2.0 — Why
+
+Integrating with other services, authenticating without a server, and<br />
+authenticating mobile apps are all more secure thanks to OAuth 2.0.
+
+---
+
+<Notes>
+
+When you look up information, you'll come across these terms.
+This is mostly to familiarize you with the terminology.
+
+- **Resource owner** - the "user"; owns the data being accessed
+- **Client** - the service accessing the data; e.g. service we'd likely make
+- **Authorization server** - accounts.google.com
+- **Resource server** - Google APIs; can be separate or same as authorization server
+- **Authorization grant** - "APP_NAME wants to access your contacts"
+- **Scope** - things that are granted
+- **Access token** - used as temporary, expiring credentials the client uses in
+  requests to the resource server
+- **Refresh token** - used to get a new access/refresh token
+
+</Notes>
+
+## OAuth 2.0 — Terminology
+
+- Resource owner
+- Client
+- Authorization server
+- Resource server
+- Authorization grant
+- Scope
+- Access token
+- Refresh token
+
+---
+
+## OAuth 2.0 — How it Works
+
+- Authorization server responsible for authentication and authorization
+- Often uses redirects so authorization server can prompt for credentials directly
+- Client app is given a short-lived access token
+- Uses HTTP headers to send access token to resouce server
+
+---
+
+## OAuth 2.0 — Flow
+
+0. **Before:** Register client app with a provider
+   ([GitHub](https://github.com/settings/apps/new))
+1. User redirected from client app to the authorization server
+1. Auth server prompts user for username/password
+1. Auth server asks if user is okay needed access
+1. Auth server redirects back to client app with access code
+1. Use authorization code to get an access/refresh token
+1. Use access token to make API calls
+1. When access token expires, use refresh token for new access/refresh tokens
+
+<Notes>
+
+- This is a high-level summary of one type of flow
+- Registering tends to be quite different from service-to-service
+
+</Notes>
+
+---
+
+## OAuth 2.0 — Flow
+
+There’s different grant types (aka flows) that serve different purposes:
+
+- Authorization Code
+- Authorization Code + PKCE
+- Implicit
+- Resource Owner Password
+- Client Credentials
+
+---
+
+## OAuth 2.0 — Flow
+
+- Website with server: _Authorization Code_
+- Static website / Single-page app: _Authorization Code + PKCE_
+- Native app: _Authorization Code + PKCE_
+- Server-side script: _Client Credentials_
+
+If you’re responsible for the client app **and** resource server, you can use
+the (Resource Owner) Password grant
+
+---
+
+<Image src="https://speakerd.s3.amazonaws.com/presentations/95e1c4c869cf44688000501dc1fa8946/slide_25.jpg" />
+
+---
+
+## OAuth 2.0 — Usage Suggestions
+
+- Most public-facing app/service/website needs
+
+---
+
+## Good Resources
+
+- [OAuth.com](https://www.oauth.com/)
+- https://alexbilbie.com/guide-to-oauth-2-grants/
+- [YouTube - OAuth 2.0 and OpenID Connect in plain English](https://youtu.be/996OiexHze0)

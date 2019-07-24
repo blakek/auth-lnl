@@ -1,17 +1,18 @@
 {
-  "name": "@auth-lnl/example-basic-auth",
+  "name": "@auth-lnl/example-oauth",
   "version": "1.0.0",
   "main": "index.js",
   "author": "GS&F Devs <mindreactor@gsandf.com> (https://gsandf.com/)",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "nodemon --experimental-modules --inspect=:9000 ./index.js"
+    "start": "nodemon --experimental-modules --inspect=:9001 ./index.js"
   },
   "dependencies": {
-    "@auth-lnl/users": "1.0.0",
-    "dot-prop": "^5.1.0",
+    "axios": "^0.19.0",
     "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "jsonwebtoken": "^8.5.1",
     "template-file": "^3.1.0"
   },
   "devDependencies": {
