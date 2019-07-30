@@ -7,7 +7,7 @@
   "main": "index.js",
   "name": "@auth-lnl/presentation",
   "scripts": {
-    "build": "mdx-deck build deck.mdx --out-dir \"$(bash ./workspace-root)/docs\"",
+    "build": "mdx-deck build deck.mdx --basepath=/auth-lnl --out-dir \"$(bash ./workspace-root)/docs\"",
     "start": "mdx-deck deck.mdx"
   },
   "version": "1.0.0"
