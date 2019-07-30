@@ -1,10 +1,11 @@
 {
   "private": true,
   "scripts": {
+    "build": "yarn workspace @auth-lnl/presentation build",
     "demo:basic-auth": "yarn workspace @auth-lnl/example-basic-auth start",
     "demo:oauth": "yarn workspace @auth-lnl/example-oauth start",
-    "present": "run-p -l start demo:*",
-    "start": "yarn workspace @auth-lnl/presentation start"
+    "present": "yarn workspace @auth-lnl/presentation start",
+    "start": "run-p -l present demo:*"
   },
   "workspaces": [
     "packages/*"
